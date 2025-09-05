@@ -1,8 +1,8 @@
-# Slopey+ Platformer
+# 3D Ball Frenzy
 
 ## Description
 
-Slopey+ Platformer is a fast-paced 3D arcade-style game developed using Python and OpenGL (GLUT/GLU). Players control a dynamic ball as it auto-rolls forward on an endlessly generated, abstract platform filled with various hazards and collectible power-ups. The goal is to navigate through challenging segments, collect points, avoid obstacles, and survive for as long as possible!
+3D Ball Frenzy is a fast-paced 3D arcade-style game developed using Python and OpenGL (GLUT/GLU). Players control a dynamic ball as it auto-rolls forward on an endlessly generated, abstract platform filled with various hazards and collectible power-ups. The goal is to navigate through challenging segments, collect points, avoid obstacles, and survive for as long as possible!
 
 ## Features
 
