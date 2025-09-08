@@ -16,16 +16,16 @@ POINT_TYPE_TILE = 0
 POINT_TYPE_OBSTACLE = 1
 
 
-### NEW: Double Jump Power-up Variables ###
+### Double Jump Power-up Variables ###
 DOUBLE_JUMP_COLOR = (0.0, 1.0, 0.0)  # Bright green
 DOUBLE_JUMP_SIZE = 15.0
 DOUBLE_JUMP_SPAWN_PROBABILITY = 0.05
 DOUBLE_JUMP_HOVER_HEIGHT = 30.0
 has_double_jump_charge = False 
-DOUBLE_JUMP_DURATION = 8.0 ### NEW: Duration of double jump ability in seconds ###
-double_jump_timer = 0.0 ### NEW: Timer to track remaining double jump duration ###
+DOUBLE_JUMP_DURATION = 8.0 ### Duration of double jump ability in seconds ###
+double_jump_timer = 0.0 ### Timer to track remaining double jump duration ###
 
-### NEW: Score Multiplier Pickup Variables ###
+### Score Multiplier Pickup Variables ###
 MULTIPLIER_COLOR = (1.0, 0.5, 0.0)  # Orange
 MULTIPLIER_SIZE = 15.0
 MULTIPLIER_SPAWN_PROBABILITY = 0.05
@@ -46,6 +46,7 @@ ASPECT = WINDOW_W / WINDOW_H
 fovY = 80.0                   # you can widen this later for speed feel
 camera_height = 120.0         # height above the floor
 camera_distance = 250.0       # distance behind the ball
+previous_ball_z = 0.0
 
 # World / Platform
 FLOOR_Y = 0.0 # The Y-coordinate of the platform surface
@@ -57,7 +58,7 @@ base_lane_width = 50.0          # Width of a single visual 'lane'
 base_num_lanes = 5              # Default number of lanes (e.g., 5 lanes wide)
 base_platform_total_width = base_lane_width * base_num_lanes 
 
-### NEW: Boost Pad Variables ###
+### Boost Pad Variables ###
 BOOST_PAD_COLOR = (1.0, 0.0, 1.0)  # Magenta
 BOOST_PAD_LENGTH = platform_segment_length * 0.3  # 30% of segment length
 BOOST_PAD_SPAWN_PROBABILITY = 0.05  # 5% chance to spawn on a segment
@@ -73,28 +74,28 @@ PLATFORM_Y_SNAP_TOLERANCE = 0.5
 SEGMENT_GAP = 0.1
 
 
-### NEW: Shield Power-up Variables ###
+### Shield Power-up Variables ###
 SHIELD_COLOR = (0.1, 0.4, 0.9)  # Blue for shield icon
 SHIELD_SIZE = 18.0 # Size of the shield icon
 SHIELD_SPAWN_PROBABILITY = 0.05 # 5% chance to spawn
 SHIELD_HOVER_HEIGHT = 30.0
 
 # Shield aura color and radius factor
-SHIELD_AURA_COLOR = (0.2, 0.6, 1.0) ### NEW: Color for the aura ###
-SHIELD_AURA_RADIUS_FACTOR = 1.2 ### NEW: Aura is 20% larger than ball ###
+SHIELD_AURA_COLOR = (0.2, 0.6, 1.0) ### Color for the aura ###
+SHIELD_AURA_RADIUS_FACTOR = 1.2 ### Aura is 20% larger than ball ###
 
-has_shield_active = False ### NEW: Player state for shield ###
-shield_charge_count = 0 ### NEW: Number of shield charges ###
-shield_timer = 0.0 ### NEW: Timer for shield duration ###
-SHIELD_DURATION = 10.0 ### NEW: How long one shield charge lasts ###
+has_shield_active = False ### Player state for shield ###
+shield_charge_count = 0 ### Number of shield charges ###
+shield_timer = 0.0 ### Timer for shield duration ###
+SHIELD_DURATION = 10.0 ### How long one shield charge lasts ###
 
 # Visual effect for ball when shielded (simulated translucent aura)
-SHIELD_EFFECT_COLOR_AURA = (0.2, 0.6, 1.0) ### NEW: Color for the aura ###
-SHIELD_EFFECT_AURA_RADIUS_FACTOR = 1.2 ### NEW: Aura is 20% larger than ball ###
-SHIELD_EFFECT_PULSE_SPEED = 4.0 ### NEW: Speed of aura pulsation ###
+SHIELD_EFFECT_COLOR_AURA = (0.2, 0.6, 1.0) ### Color for the aura ###
+SHIELD_EFFECT_AURA_RADIUS_FACTOR = 1.2 ### Aura is 20% larger than ball ###
+SHIELD_EFFECT_PULSE_SPEED = 4.0 ### Speed of aura pulsation ###
 
 
-# NEW: Segment Configuration Constants (for readability)
+# Segment Configuration Constants (for readability)
 CONFIG_NUM_LANES = 0
 CONFIG_X_OFFSET = 1
 CONFIG_Y_LEVEL = 2 # Always FLOOR_Y for this version (no slopes)
@@ -135,11 +136,11 @@ SEGMENT_TYPE_NARROW_CENTER_WITH_HOLES = 23 # Narrow center, with holes inside
 SEGMENT_TYPE_NARROW_BEAM_CENTER = 24       # Very narrow 1-lane path, centered (Used for visual type)
 
 
-# NEW: Initial Safe Segments
+# Initial Safe Segments
 INITIAL_SAFE_SEGMENTS_COUNT = 3
 segments_until_hazards_start = 0 
 
-# NEW: Parameters for variations
+# Parameters for variations
 SEGMENT_VARIATION_PROBABILITY = 0.7 # Overall chance for a segment to NOT be normal
 # Holes
 HOLE_PROBABILITY_PER_LANE = 0.15 
@@ -171,13 +172,13 @@ forward_speed = -500.0  # units per second (toward -Z)
 last_time_ms = None  # for delta time
 ball_lateral_speed = 300.0 # Lateral speed in units/sec, applied in idle
 ball_rotation_angle = 0.0
-BALL_COLOR_FLAT = (0.0, 0.4, 1.0) ### NEW: Define a flat color for the ball ###
+BALL_COLOR_FLAT = (0.0, 0.4, 1.0) ### Define a flat color for the ball ###
 
-### NEW: Game State Management (Enum-like) ###
+### Game State Management (Enum-like) ###
 STATE_PLAYING = 0
 STATE_ANIMATING_DEATH = 1
 STATE_GAME_OVER = 2
-game_state = STATE_PLAYING ### NEW: Current state of the game ###
+game_state = STATE_PLAYING ### Current state of the game ###
 
 # Game State Flags
 is_falling = False
@@ -194,15 +195,15 @@ fall_threshold_y = FLOOR_Y - 50.0
 GRAVITY = -1500.0 
 JUMP_STRENGTH = 550.0 
 
-### NEW: Point Pulsation Variables ###
+### Point Pulsation Variables ###
 point_pulse_scale = 1.0 # Current scale factor for pulsation
 point_pulse_time = 0.0 # Accumulator for pulse animation timing
-point_hover_offset = 0.0 ### NEW: Global variable for hover animation ###
+point_hover_offset = 0.0 ### Global variable for hover animation ###
 POINT_PULSE_SPEED = 3.0 # Increased speed for more noticeable pulsation
 POINT_PULSE_MIN_SCALE = 0.6 # Decreased min size for more dramatic effect
 POINT_PULSE_MAX_SCALE = 1.4 # Increased max size for more dramatic effect
 
-### NEW: Ball Breaking Animation Variables ###
+### Ball Breaking Animation Variables ###
 breaking_particles = [] # List to hold particle dictionaries
 NUM_BREAKING_PARTICLES = 30
 PARTICLE_LIFETIME = 0.8 # Seconds
@@ -210,7 +211,7 @@ PARTICLE_INITIAL_SPEED_MAX = 300.0 # Max initial velocity for explosion
 PARTICLE_SIZE_MAX_FACTOR = 0.3 # Max size of a particle relative to ball_radius
 BALL_EXPLOSION_COLOR = (1.0, 0.5, 0.0) # E.g., orange/red for explosion
 animation_timer = 0.0 # Countdown for the animation
-death_animation_timer = 0.0 ### NEW: Timer for the death animation ###
+death_animation_timer = 0.0 ### Timer for the death animation ###
 
 # Platform colors
 DARK_BLUE = (0.1, 0.1, 0.4)
@@ -247,11 +248,6 @@ BACKGROUND_MOVE_SPEED = 100.0
 # Key State Tracking System
 keys_pressed = {}
 
-# Create a single, reusable quadric object for the ball
-ball_quadric = gluNewQuadric()
-
-# Create a single, reusable quadric object for the ball
-ball_quadric = gluNewQuadric()
 
 # Create a single, reusable quadric object for the ball
 ball_quadric = gluNewQuadric()
@@ -335,7 +331,7 @@ def get_full_lane_x_coords(num_lanes_block, x_center_offset):
     x_right_edge = x_center_offset + (active_block_width / 2.0)
     return x_left_edge, x_right_edge
 
-def generate_platform_tile(last_segment=None): ### CRITICAL FIX: UnboundLocalError and Consolidated Spawning ###
+def generate_platform_tile(last_segment=None):
     """
     Generates a new platform segment. Hazards (holes, static obstacles, moving obstacles)
     are now applied based on spacing counters and valid choices,
@@ -361,7 +357,7 @@ def generate_platform_tile(last_segment=None): ### CRITICAL FIX: UnboundLocalErr
     double_jump_powerups = [] 
     multiplier_pickups = [] 
     boost_pads = [] 
-    shields = [] ### NEW ###
+    shields = [] 
 
     segment_type = SEGMENT_TYPE_NORMAL_FULL_CENTERED
 
@@ -540,9 +536,8 @@ def generate_platform_tile(last_segment=None): ### CRITICAL FIX: UnboundLocalErr
     # --- Collectible Spawning (Consolidated for uniqueness) ---
     points = []
     
-    can_add_collectibles = True # Flag to control if any collectible can spawn
-    if not force_no_hazards_this_segment: # Only spawn collectibles if not in a safe initial segment
-        # Get available safe lanes (not holes, not occupied by static obstacles)
+    can_add_collectibles = True 
+    if not force_no_hazards_this_segment: 
         num_lanes_current_seg = new_config[CONFIG_NUM_LANES]
         x_offset_current_seg = new_config[CONFIG_X_OFFSET]
         safe_lanes_for_collectible_placement = [i for i in range(num_lanes_current_seg) if i not in hole_lanes]
@@ -550,15 +545,13 @@ def generate_platform_tile(last_segment=None): ### CRITICAL FIX: UnboundLocalErr
             obstacle_lanes = [obs['lane_index'] for obs in obstacles]
             safe_lanes_for_collectible_placement = [lane for lane in safe_lanes_for_collectible_placement if lane not in obstacle_lanes]
         
-        # If no safe lanes, no collectibles can spawn
         if not safe_lanes_for_collectible_placement:
             can_add_collectibles = False
 
         if can_add_collectibles:
             collectible_type_to_spawn = None
 
-            # Decide which type of collectible to spawn (priority: Shield > Boost > Multiplier > DoubleJump > Points)
-            if random.random() < SHIELD_SPAWN_PROBABILITY: ### NEW: Shield spawning check ###
+            if random.random() < SHIELD_SPAWN_PROBABILITY:
                 collectible_type_to_spawn = 'SHIELD'
             elif random.random() < BOOST_PAD_SPAWN_PROBABILITY:
                 collectible_type_to_spawn = 'BOOST_PAD'
@@ -569,9 +562,7 @@ def generate_platform_tile(last_segment=None): ### CRITICAL FIX: UnboundLocalErr
             elif random.random() < POINT_SPAWN_PROBABILITY_PER_SEGMENT:
                 collectible_type_to_spawn = 'POINT'
                 
-            # Now, try to spawn the chosen collectible
             if collectible_type_to_spawn:
-                # Common logic to get a spawn lane for tile-based pickups
                 chosen_lane_idx = random.choice(safe_lanes_for_collectible_placement)
                 playable_x_left = x_offset_current_seg - (num_lanes_current_seg * base_lane_width / 2.0)
                 collectible_x = playable_x_left + (chosen_lane_idx * base_lane_width) + (base_lane_width / 2.0)
@@ -653,19 +644,18 @@ def generate_platform_tile(last_segment=None): ### CRITICAL FIX: UnboundLocalErr
         'obstacles': obstacles,
         'moving_obstacles': moving_obstacles,
         'points': points,
-        'double_jump_powerups': double_jump_powerups, ### NEW ###
-        'multiplier_pickups': multiplier_pickups, ### NEW ###
-        'boost_pads': boost_pads, ### NEW ###
-        'shields': shields, ### NEW ###
+        'double_jump_powerups': double_jump_powerups, 
+        'multiplier_pickups': multiplier_pickups, 
+        'boost_pads': boost_pads, 
+        'shields': shields, 
         'segment_type': segment_type,
-        'debug_text': f"T:{segment_type} L:{new_config[CONFIG_NUM_LANES]} O:{new_config[CONFIG_X_OFFSET]:.0f}"
+        # 'debug_text': f"T:{segment_type} L:{new_config[CONFIG_NUM_LANES]} O:{new_config[CONFIG_X_OFFSET]:.0f}"
     }
     
     platform_segments.append(tile)
     last_platform_tile_z_end = end_z
 
-
-def draw_platform_tiled(): ### MODIFIED: Removed glLineWidth ###
+def draw_platform_tiled(): 
     """
     Draws the procedurally generated platform and any obstacles on it.
     Grid lines are drawn over the entire platform area, while solid tiles are drawn individually.
@@ -678,7 +668,8 @@ def draw_platform_tiled(): ### MODIFIED: Removed glLineWidth ###
         
         # Display debug text for the first segment
         if segment_idx == 0: 
-            draw_text(10, WINDOW_H - 90, tile['debug_text'])
+            # draw_text(10, WINDOW_H - 90, tile['debug_text'])
+            pass
         
         # --- Draw Each SOLID Lane Individually (Top, Sides, Bottom) ---
         for lane_idx in range(num_lanes):
@@ -782,17 +773,13 @@ def draw_platform_tiled(): ### MODIFIED: Removed glLineWidth ###
                 gluCylinder(ball_quadric, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_HEIGHT, 16, 1)
                 
                 glPushMatrix()
-                glTranslatef(0, 0, MOVING_OBSTACLE_HEIGHT)
-                gluDisk(ball_quadric, 0, MOVING_OBSTACLE_RADIUS, 16, 1)
-                glPopMatrix()
-
-                gluDisk(ball_quadric, 0, MOVING_OBSTACLE_RADIUS, 16, 1)
-                
+                glTranslatef(0, 0, MOVING_OBSTACLE_HEIGHT)               
+                glPopMatrix()               
                 glPopMatrix()
 
         # --- Draw Grid Lines (always drawn over the full platform area) ---
         glColor3f(GRID_CYAN[0], GRID_CYAN[1], GRID_CYAN[2])
-        # REMOVED: glLineWidth(1.0) # Removed for strict compliance
+        
         glBegin(GL_LINES)
         
         # Draw vertical grid lines (lane boundaries)
@@ -808,300 +795,6 @@ def draw_platform_tiled(): ### MODIFIED: Removed glLineWidth ###
             glVertex3f(x_right, y_level + 0.1, current_z)
         
         glEnd()
-
-def draw_platform_tiled(): ### MODIFIED: Removed glLineWidth ###
-    """
-    Draws the procedurally generated platform and any obstacles on it.
-    Grid lines are drawn over the entire platform area, while solid tiles are drawn individually.
-    """
-    grid_density_z = 3
-    for segment_idx, tile in enumerate(platform_segments):
-        num_lanes, x_offset, y_level = tile['config']
-        y_bottom = y_level - platform_thickness
-        x_left, x_right = get_full_lane_x_coords(num_lanes, x_offset)
-        
-        # Display debug text for the first segment
-        if segment_idx == 0: 
-            draw_text(10, WINDOW_H - 90, tile['debug_text'])
-        
-        # --- Draw Each SOLID Lane Individually (Top, Sides, Bottom) ---
-        for lane_idx in range(num_lanes):
-            # Skip drawing ANY 3D geometry for hole lanes
-            if lane_idx in tile['hole_lanes']:
-                continue
-                
-            # Calculate lane coordinates
-            lane_x_left = x_left + (lane_idx * base_lane_width)
-            lane_x_right = lane_x_left + base_lane_width
-            
-            # --- Draw Top Surface with checkerboard pattern ---
-            if (segment_idx + lane_idx) % 2 == 0: 
-                glColor3f(DARK_BLUE[0], DARK_BLUE[1], DARK_BLUE[2])
-            else: 
-                glColor3f(MID_BLUE[0], MID_BLUE[1], MID_BLUE[2])
-            
-            glBegin(GL_QUADS)
-            # Top face
-            glVertex3f(lane_x_left,  y_level, tile['start_z'])
-            glVertex3f(lane_x_right, y_level, tile['start_z'])
-            glVertex3f(lane_x_right, y_level, tile['end_z'])
-            glVertex3f(lane_x_left,  y_level, tile['end_z'])
-            glEnd()
-            
-            # --- Draw Side Walls and Bottom for THIS solid lane ---
-            glColor3f(DARK_BLUE_SIDE[0], DARK_BLUE_SIDE[1], DARK_BLUE_SIDE[2])
-            glBegin(GL_QUADS)
-            
-            # Left side wall (only if this is the leftmost lane or adjacent left lane is a hole)
-            if lane_idx == 0 or (lane_idx - 1) in tile['hole_lanes']:
-                glVertex3f(lane_x_left, y_level,  tile['start_z'])
-                glVertex3f(lane_x_left, y_level,  tile['end_z'])
-                glVertex3f(lane_x_left, y_bottom, tile['end_z'])
-                glVertex3f(lane_x_left, y_bottom, tile['start_z'])
-            
-            # Right side wall (only if this is the rightmost lane or adjacent right lane is a hole)
-            if lane_idx == num_lanes - 1 or (lane_idx + 1) in tile['hole_lanes']:
-                glVertex3f(lane_x_right, y_level,  tile['start_z'])
-                glVertex3f(lane_x_right, y_level,  tile['end_z'])
-                glVertex3f(lane_x_right, y_bottom, tile['end_z'])
-                glVertex3f(lane_x_right, y_bottom, tile['start_z'])
-            
-            # Front face (always drawn for solid lanes at the segment's start_z)
-            glVertex3f(lane_x_left,  y_level,  tile['start_z'])
-            glVertex3f(lane_x_right, y_level,  tile['start_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['start_z'])
-            glVertex3f(lane_x_left,  y_bottom, tile['start_z'])
-            
-            # Back face (always drawn for solid lanes at the segment's end_z)
-            glVertex3f(lane_x_left,  y_level,  tile['end_z'])
-            glVertex3f(lane_x_right, y_level,  tile['end_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['end_z'])
-            glVertex3f(lane_x_left,  y_bottom, tile['end_z'])
-            glEnd()
-            
-            # Bottom face of this lane
-            glColor3f(MID_BLUE_SIDE[0], MID_BLUE_SIDE[1], MID_BLUE_SIDE[2])
-            glBegin(GL_QUADS)
-            glVertex3f(lane_x_left,  y_bottom, tile['start_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['start_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['end_z'])
-            glVertex3f(lane_x_left,  y_bottom, tile['end_z'])
-            glEnd()
-        
-        ### Draw Static Obstacles ###
-        if tile.get('obstacles'):
-            glColor3f(OBSTACLE_COLOR[0], OBSTACLE_COLOR[1], OBSTACLE_COLOR[2])
-            for obstacle_idx, obstacle in enumerate(tile['obstacles']): 
-                obs_lane_idx = obstacle['lane_index']
-                obs_z_factor = obstacle['z_pos_factor']
-                obs_size = obstacle['size']
-
-                obs_x_center = x_left + (obs_lane_idx * base_lane_width) + (base_lane_width / 2.0)
-                obs_y_center = y_level + obs_size / 2.0
-                obs_z_center = tile['start_z'] + (tile['end_z'] - tile['start_z']) * obs_z_factor
-                
-                glPushMatrix()
-                glTranslatef(obs_x_center, obs_y_center, obs_z_center)
-                glutSolidCube(obs_size)
-                glPopMatrix()
-
-                obstacle['world_x'] = obs_x_center
-                obstacle['world_y_top'] = obs_y_center + obs_size / 2.0
-                obstacle['world_z'] = obs_z_center
-
-        ### Draw Moving Obstacles (Cylinders) - Vertical ###
-        if tile.get('moving_obstacles'):
-            glColor3f(MOVING_OBSTACLE_COLOR[0], MOVING_OBSTACLE_COLOR[1], MOVING_OBSTACLE_COLOR[2])
-            
-            for mobstacle in tile['moving_obstacles']:
-                mob_z_factor = mobstacle['z_pos_factor']
-                mob_x_current_absolute = mobstacle['x_pos_current_absolute']
-
-                mob_y_center = y_level + MOVING_OBSTACLE_HEIGHT / 2.0 
-                mob_z_center = tile['start_z'] + (tile['end_z'] - tile['start_z']) * mob_z_factor
-                
-                glPushMatrix()
-                glTranslatef(mob_x_current_absolute, mob_y_center - MOVING_OBSTACLE_HEIGHT/2.0, mob_z_center)
-                glRotatef(-90, 1, 0, 0) # Corrected rotation to face up
-                gluCylinder(ball_quadric, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_HEIGHT, 16, 1)
-                
-                glPushMatrix()
-                glTranslatef(0, 0, MOVING_OBSTACLE_HEIGHT)
-                gluDisk(ball_quadric, 0, MOVING_OBSTACLE_RADIUS, 16, 1)
-                glPopMatrix()
-
-                gluDisk(ball_quadric, 0, MOVING_OBSTACLE_RADIUS, 16, 1)
-                
-                glPopMatrix()
-
-        # --- Draw Grid Lines (always drawn over the full platform area) ---
-        glColor3f(GRID_CYAN[0], GRID_CYAN[1], GRID_CYAN[2])
-        # REMOVED: glLineWidth(1.0) # Removed for strict compliance
-        glBegin(GL_LINES)
-        
-        # Vertical grid lines (lane boundaries)
-        for i in range(num_lanes + 1):
-            line_x = x_left + (i * base_lane_width)
-            glVertex3f(line_x, y_level + 0.1, tile['start_z'])
-            glVertex3f(line_x, y_level + 0.1, tile['end_z'])
-        
-        # Horizontal grid lines
-        for i in range(grid_density_z + 1):
-            current_z = tile['start_z'] - ((i / grid_density_z) * platform_segment_length)
-            glVertex3f(x_left,  y_level + 0.1, current_z)
-            glVertex3f(x_right, y_level + 0.1, current_z)
-        
-        glEnd()
-
-def draw_platform_tiled(): ### MODIFIED: Removed glLineWidth ###
-    """
-    Draws the procedurally generated platform and any obstacles on it.
-    Grid lines are drawn over the entire platform area, while solid tiles are drawn individually.
-    """
-    grid_density_z = 3
-    for segment_idx, tile in enumerate(platform_segments):
-        num_lanes, x_offset, y_level = tile['config']
-        y_bottom = y_level - platform_thickness
-        x_left, x_right = get_full_lane_x_coords(num_lanes, x_offset)
-        
-        # Display debug text for the first segment
-        if segment_idx == 0: 
-            draw_text(10, WINDOW_H - 90, tile['debug_text'])
-        
-        # --- Draw Each SOLID Lane Individually (Top, Sides, Bottom) ---
-        for lane_idx in range(num_lanes):
-            # Skip drawing ANY 3D geometry for hole lanes
-            if lane_idx in tile['hole_lanes']:
-                continue
-                
-            # Calculate lane coordinates
-            lane_x_left = x_left + (lane_idx * base_lane_width)
-            lane_x_right = lane_x_left + base_lane_width
-            
-            # --- Draw Top Surface with checkerboard pattern ---
-            if (segment_idx + lane_idx) % 2 == 0: 
-                glColor3f(DARK_BLUE[0], DARK_BLUE[1], DARK_BLUE[2])
-            else: 
-                glColor3f(MID_BLUE[0], MID_BLUE[1], MID_BLUE[2])
-            
-            glBegin(GL_QUADS)
-            # Top face
-            glVertex3f(lane_x_left,  y_level, tile['start_z'])
-            glVertex3f(lane_x_right, y_level, tile['start_z'])
-            glVertex3f(lane_x_right, y_level, tile['end_z'])
-            glVertex3f(lane_x_left,  y_level, tile['end_z'])
-            glEnd()
-            
-            # --- Draw Side Walls and Bottom for THIS solid lane ---
-            glColor3f(DARK_BLUE_SIDE[0], DARK_BLUE_SIDE[1], DARK_BLUE_SIDE[2])
-            glBegin(GL_QUADS)
-            
-            # Left side wall (only if this is the leftmost lane or adjacent left lane is a hole)
-            if lane_idx == 0 or (lane_idx - 1) in tile['hole_lanes']:
-                glVertex3f(lane_x_left, y_level,  tile['start_z'])
-                glVertex3f(lane_x_left, y_level,  tile['end_z'])
-                glVertex3f(lane_x_left, y_bottom, tile['end_z'])
-                glVertex3f(lane_x_left, y_bottom, tile['start_z'])
-            
-            # Right side wall (only if this is the rightmost lane or adjacent right lane is a hole)
-            if lane_idx == num_lanes - 1 or (lane_idx + 1) in tile['hole_lanes']:
-                glVertex3f(lane_x_right, y_level,  tile['start_z'])
-                glVertex3f(lane_x_right, y_level,  tile['end_z'])
-                glVertex3f(lane_x_right, y_bottom, tile['end_z'])
-                glVertex3f(lane_x_right, y_bottom, tile['start_z'])
-            
-            # Front face (always drawn for solid lanes at the segment's start_z)
-            glVertex3f(lane_x_left,  y_level,  tile['start_z'])
-            glVertex3f(lane_x_right, y_level,  tile['start_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['start_z'])
-            glVertex3f(lane_x_left,  y_bottom, tile['start_z'])
-            
-            # Back face (always drawn for solid lanes at the segment's end_z)
-            glVertex3f(lane_x_left,  y_level,  tile['end_z'])
-            glVertex3f(lane_x_right, y_level,  tile['end_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['end_z'])
-            glVertex3f(lane_x_left,  y_bottom, tile['end_z'])
-            glEnd()
-            
-            # Bottom face of this lane
-            glColor3f(MID_BLUE_SIDE[0], MID_BLUE_SIDE[1], MID_BLUE_SIDE[2])
-            glBegin(GL_QUADS)
-            glVertex3f(lane_x_left,  y_bottom, tile['start_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['start_z'])
-            glVertex3f(lane_x_right, y_bottom, tile['end_z'])
-            glVertex3f(lane_x_left,  y_bottom, tile['end_z'])
-            glEnd()
-        
-        ### Draw Static Obstacles ###
-        if tile.get('obstacles'):
-            glColor3f(OBSTACLE_COLOR[0], OBSTACLE_COLOR[1], OBSTACLE_COLOR[2])
-            for obstacle_idx, obstacle in enumerate(tile['obstacles']): 
-                obs_lane_idx = obstacle['lane_index']
-                obs_z_factor = obstacle['z_pos_factor']
-                obs_size = obstacle['size']
-
-                obs_x_center = x_left + (obs_lane_idx * base_lane_width) + (base_lane_width / 2.0)
-                obs_y_center = y_level + obs_size / 2.0
-                obs_z_center = tile['start_z'] + (tile['end_z'] - tile['start_z']) * obs_z_factor
-                
-                glPushMatrix()
-                glTranslatef(obs_x_center, obs_y_center, obs_z_center)
-                glutSolidCube(obs_size)
-                glPopMatrix()
-
-                obstacle['world_x'] = obs_x_center
-                obstacle['world_y_top'] = obs_y_center + obs_size / 2.0
-                obstacle['world_z'] = obs_z_center
-
-        ### Draw Moving Obstacles (Cylinders) - Vertical ###
-        if tile.get('moving_obstacles'):
-            glColor3f(MOVING_OBSTACLE_COLOR[0], MOVING_OBSTACLE_COLOR[1], MOVING_OBSTACLE_COLOR[2])
-            
-            for mobstacle in tile['moving_obstacles']:
-                mob_z_factor = mobstacle['z_pos_factor']
-                mob_x_current_absolute = mobstacle['x_pos_current_absolute']
-
-                mob_y_center = y_level + MOVING_OBSTACLE_HEIGHT / 2.0 
-                mob_z_center = tile['start_z'] + (tile['end_z'] - tile['start_z']) * mob_z_factor
-                
-                glPushMatrix()
-                glTranslatef(mob_x_current_absolute, mob_y_center - MOVING_OBSTACLE_HEIGHT/2.0, mob_z_center)
-                glRotatef(-90, 1, 0, 0)
-                gluCylinder(ball_quadric, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_HEIGHT, 16, 1)
-                
-                glPushMatrix()
-                glTranslatef(0, 0, MOVING_OBSTACLE_HEIGHT)
-                gluDisk(ball_quadric, 0, MOVING_OBSTACLE_RADIUS, 16, 1)
-                glPopMatrix()
-
-                gluDisk(ball_quadric, 0, MOVING_OBSTACLE_RADIUS, 16, 1)
-                
-                glPopMatrix()
-
-        # --- Draw Grid Lines (always drawn over the full platform area) ---
-        glColor3f(GRID_CYAN[0], GRID_CYAN[1], GRID_CYAN[2])
-        # REMOVED: glLineWidth(1.0) # Removed for strict compliance
-        glBegin(GL_LINES)
-        
-        # Vertical grid lines (lane boundaries)
-        for i in range(num_lanes + 1):
-            line_x = x_left + (i * base_lane_width)
-            glVertex3f(line_x, y_level + 0.1, tile['start_z'])
-            glVertex3f(line_x, y_level + 0.1, tile['end_z'])
-        
-        # Horizontal grid lines
-        for i in range(grid_density_z + 1):
-            current_z = tile['start_z'] - ((i / grid_density_z) * platform_segment_length)
-            glVertex3f(x_left,  y_level + 0.1, current_z)
-            glVertex3f(x_right, y_level + 0.1, current_z)
-        
-        glEnd()
-
-# Helper quadric for drawing points
-#point_quadric = gluNewQuadric()
-
-# Helper quadric for drawing points
-# point_quadric = gluNewQuadric() # This global quadric is not used by glutSolidCube, so it can be removed.
 
 def draw_points(): ### CRITICAL FIX: No glScalef, uses direct size ###
     """
@@ -1123,7 +816,7 @@ def draw_points(): ### CRITICAL FIX: No glScalef, uses direct size ###
                 # --- Apply Pulsation Scale (via direct argument) ---
                 current_point_size = POINT_SIZE * point_pulse_scale ### MODIFIED: Calculate final size ###
                 
-                # REMOVED: glScalef calls
+                
                 glRotatef(45, 1, 0, 0) # Rotate for diamond shape (on X-axis)
                 glRotatef(45, 0, 1, 0) # Rotate for diamond shape (on Y-axis)
                 
@@ -1344,7 +1037,7 @@ def draw_boost_pads(): ### CRITICAL FIX: Pulsating Boost Pad Color ###
 
 
 
-def fill_segment_queue(): ### NEW FUNCTION ###
+def fill_segment_queue():
     """
     Fills the segment queue with a predefined pattern of narrow beams and random segments.
     """
@@ -1411,335 +1104,10 @@ def draw_ball_shadow():
     glTranslatef(ball_pos[0], ball_pos[1] + 0.2, ball_pos[2])
     glColor3f(SHADOW_COLOR[0], SHADOW_COLOR[1], SHADOW_COLOR[2])
     quadric = gluNewQuadric()
-    gluDisk(quadric, 0, ball_radius * 0.8, 16, 1)
-    gluDeleteQuadric(quadric)
+    gluCylinder(quadric, ball_radius * 0.8, ball_radius * 0.8, 0.1, 16, 1)
     glPopMatrix()
 
 
-def idle(): ### CRITICAL FIX: Single Ball Break Animation Trigger ###
-    """
-    The main game loop logic, now driven by a game_state machine.
-    """
-    global last_time_ms, ball_pos, is_falling, game_over, is_grounded, game_state
-    global fall_velocity_x, fall_velocity_y, last_platform_tile_z_end, death_animation_timer
-    global keys_pressed, breaking_particles, player_score, ball_rotation_angle
-    global point_pulse_scale, point_pulse_time, point_hover_offset
-    global has_double_jump_charge, double_jump_timer, score_multiplier, multiplier_timer, is_boost_active, boost_timer, forward_speed 
-    global has_shield_active, shield_charge_count, shield_timer 
-    global is_obstacle_breaking_active
-
-    now = glutGet(GLUT_ELAPSED_TIME)
-    if last_time_ms is None: last_time_ms = now = glutGet(GLUT_ELAPSED_TIME) # Initialize last_time_ms
-    
-    dt = (now - last_time_ms) / 1000.0
-    last_time_ms = now
-
-    # --- Game State Machine Logic ---
-    if game_state == STATE_PLAYING:
-        # --- Point Pulsation Update ---
-        point_pulse_time += dt * POINT_PULSE_SPEED
-        pulse_factor = (math.sin(point_pulse_time) + 1.0) / 2.0 
-        point_pulse_scale = POINT_PULSE_MIN_SCALE + (POINT_PULSE_MAX_SCALE - POINT_PULSE_MIN_SCALE) * pulse_factor
-        point_hover_offset = math.sin(point_pulse_time * 1.5) * 2.0 
-
-        # --- Update Multiplier Timer ---
-        if multiplier_timer > 0:
-            multiplier_timer -= dt
-            if multiplier_timer <= 0:
-                score_multiplier = 1 
-        
-        # --- Update Boost Timer ---
-        if is_boost_active:
-            boost_timer -= dt
-            if boost_timer <= 0:
-                is_boost_active = False
-                forward_speed = -500.0 
-
-        # --- Double Jump Timer ---
-        if double_jump_timer > 0:
-            double_jump_timer -= dt
-            if double_jump_timer <= 0:
-                has_double_jump_charge = False
-
-        # --- Update Shield Timer ---
-        if has_shield_active and shield_charge_count > 0:
-            shield_timer -= dt
-            if shield_timer <= 0:
-                shield_charge_count -= 1 
-                if shield_charge_count == 0:
-                    has_shield_active = False 
-                else: 
-                    shield_timer = SHIELD_DURATION
-
-        # --- 1. Apply Physics (Vertical) ---
-        if not is_grounded:
-            fall_velocity_y += GRAVITY * dt 
-        ball_pos[1] += fall_velocity_y * dt
-        
-        if is_falling: 
-            ball_pos[0] += fall_velocity_x * dt    
-
-        # --- 2. Handle Player Input and Forward Motion ---
-        if not is_falling: 
-            if keys_pressed.get(b'a'): ball_pos[0] -= ball_lateral_speed * dt
-            if keys_pressed.get(b'd'): ball_pos[0] += ball_lateral_speed * dt
-
-        ball_pos[2] += forward_speed * dt
-
-        # Update ball rotation angle for rolling effect
-        distance_moved = abs(forward_speed * dt)
-        circumference = 2 * math.pi * ball_radius
-        ball_rotation_angle += (distance_moved / circumference) * 360.0
-        ball_rotation_angle %= 360.0
-
-        # --- 3. Continuous Platform Generation ---
-        if ball_pos[2] < last_platform_tile_z_end + platform_segment_length * (num_visible_tiles / 2):
-            last_segment = platform_segments[-1] if platform_segments else None
-            generate_platform_tile(last_segment)
-            if platform_segments and platform_segments[0]['start_z'] > ball_pos[2] + camera_distance * 2:
-                platform_segments.pop(0)
-
-        # --- 4. Process Moving Obstacles ---
-        for segment in platform_segments:
-            if segment.get('moving_obstacles'):
-                num_lanes_seg, x_offset_seg, y_level_seg = segment['config']
-                segment_x_left_boundary, segment_x_right_boundary = get_full_lane_x_coords(num_lanes_seg, x_offset_seg)
-
-                for mobstacle in segment['moving_obstacles']:
-                    mob_x_current_absolute = mobstacle['x_pos_current_absolute']
-                    mob_direction = mobstacle['direction']
-
-                    mobstacle['x_pos_current_absolute'] += MOVING_OBSTACLE_SPEED * mob_direction * dt
-
-                    mob_actual_x_left_edge = mob_x_current_absolute - MOVING_OBSTACLE_RADIUS
-                    mob_actual_x_right_edge = mob_x_current_absolute + MOVING_OBSTACLE_RADIUS
-
-                    if mob_actual_x_left_edge < segment_x_left_boundary or \
-                       mob_actual_x_right_edge > segment_x_right_boundary:
-                        mobstacle['direction'] *= -1
-                        if mob_actual_x_left_edge < segment_x_left_boundary:
-                            mobstacle['x_pos_current_absolute'] = segment_x_left_boundary + MOVING_OBSTACLE_RADIUS
-                        elif mob_actual_x_right_edge > segment_x_right_boundary:
-                            mobstacle['x_pos_current_absolute'] = segment_x_right_boundary - MOVING_OBSTACLE_RADIUS
-                            
-        # --- 5. Find Current Segment and Determine Grounding/Falling State ---
-        is_grounded_this_frame_candidate = False 
-        
-        current_segment = None
-        for segment in platform_segments:
-            if segment['end_z'] - 1 < ball_pos[2] <= segment['start_z'] + 1:
-                current_segment = segment
-                break 
-        
-        if current_segment:
-            target_ball_y_center = FLOOR_Y + ball_radius
-            num_lanes, x_offset, _ = current_segment['config']
-            playable_x_left, playable_x_right = get_full_lane_x_coords(num_lanes, x_offset)
-
-            is_over_platform_x_solid_ground = (ball_pos[0] >= playable_x_left - ball_radius * 0.5 and 
-                                               ball_pos[0] <= playable_x_right + ball_radius * 0.5)
-
-            ball_is_over_hole = False
-            if current_segment['hole_lanes']:
-                x_relative = ball_pos[0] - playable_x_left
-                lane_index = int(x_relative / base_lane_width)
-                if 0 <= lane_index < num_lanes and lane_index in current_segment['hole_lanes']:
-                    ball_is_over_hole = True
-            
-            # --- Primary Grounding Condition ---
-            if is_over_platform_x_solid_ground and not ball_is_over_hole and ball_pos[1] <= target_ball_y_center + PLATFORM_Y_SNAP_TOLERANCE:
-                is_grounded_this_frame_candidate = True
-        
-        # --- Apply Grounding State & Snap ---
-        if is_grounded_this_frame_candidate: 
-            if not is_grounded: # Just landed
-                is_grounded = True
-                is_falling = False 
-                fall_velocity_y = 0.0 
-                ball_pos[1] = target_ball_y_center 
-            else: # Already grounded
-                ball_pos[1] = target_ball_y_center 
-        else: # Not on solid ground or too high - Ball should be in air (jumping or falling)
-            if is_grounded: # Just left ground this frame
-                is_grounded = False
-                is_falling = True 
-                fall_velocity_y = 0.0 
-                if current_segment:
-                    playable_x_left, playable_x_right = get_full_lane_x_coords(current_segment['config'][CONFIG_NUM_LANES], current_segment['config'][CONFIG_X_OFFSET])
-                    if ball_pos[0] < playable_x_left: fall_velocity_x = -100.0
-                    elif ball_pos[0] > playable_x_right: fall_velocity_x = 100.0
-                    else: fall_velocity_x = 0.0
-                else: 
-                    fall_velocity_x = 100.0 if ball_pos[0] > 0 else -100.0
-            
-        # --- Collision Checks (Only if currently grounded) ---
-        if is_grounded: 
-            # Static Obstacle Collision
-            if current_segment.get('obstacles'):
-                for obstacle_idx, obstacle in enumerate(current_segment['obstacles']):
-                    obs_x_center = obstacle['world_x']
-                    obs_y_center = obstacle['world_y_top'] - obstacle['size'] / 2.0
-                    obs_z_center = obstacle['world_z']
-                    
-                    closest_x = max(obs_x_center - obstacle['size'] / 2.0, min(ball_pos[0], obs_x_center + obstacle['size'] / 2.0))
-                    closest_y = max(obs_y_center - obstacle['size'] / 2.0, min(ball_pos[1], obs_y_center + obstacle['size'] / 2.0))
-                    closest_z = max(obs_z_center - obstacle['size'] / 2.0, min(ball_pos[2], obs_z_center + obstacle['size'] / 2.0))
-                    
-                    distance_sq = (closest_x - ball_pos[0])**2 + (closest_y - ball_pos[1])**2 + (closest_z - ball_pos[2])**2
-                    
-                    if distance_sq < (ball_radius**2):
-                        # Only trigger animation if shield is NOT active, OR shield is active but has no charges
-                        if not (has_shield_active and shield_charge_count > 0): 
-                            game_state = STATE_ANIMATING_DEATH
-                            death_animation_timer = PARTICLE_LIFETIME
-                            breaking_particles = generate_explosion_particles(ball_pos, ball_radius, BALL_COLOR_FLAT)
-                            return 
-                        else: # Shield active: Obstacle breaks, game continues
-                            is_obstacle_breaking_active = True 
-                            death_animation_timer = PARTICLE_LIFETIME 
-                            obstacle_center_pos = [obs_x_center, obs_y_center, obs_z_center]
-                            breaking_particles = generate_explosion_particles(obstacle_center_pos, obstacle['size']/2.0, OBSTACLE_COLOR) 
-                            current_segment['obstacles'].pop(obstacle_idx) 
-                            return 
-
-            # Moving Obstacle Collision
-            if current_segment.get('moving_obstacles'):
-                for mobstacle_idx, mobstacle in enumerate(current_segment['moving_obstacles']):
-                    mob_z_factor = mobstacle['z_pos_factor']
-                    mob_x_center_absolute = mobstacle['x_pos_current_absolute']
-                    
-                    mob_y_bottom = FLOOR_Y
-                    mob_y_top = FLOOR_Y + MOVING_OBSTACLE_HEIGHT
-                    mob_z_center = current_segment['start_z'] + (current_segment['end_z'] - current_segment['start_z']) * mob_z_factor
-
-                    closest_x_on_axis = mob_x_center_absolute
-                    closest_y_on_axis = max(mob_y_bottom, min(ball_pos[1], mob_y_top))
-                    closest_z_on_axis = mob_z_center
-
-                    dist_xz_sq = (ball_pos[0] - closest_x_on_axis)**2 + \
-                                 (ball_pos[2] - closest_z_on_axis)**2
-
-                    if dist_xz_sq < (ball_radius + MOVING_OBSTACLE_RADIUS)**2:
-                        if ball_pos[1] + ball_radius > mob_y_bottom and ball_pos[1] - ball_radius < mob_y_top:
-                            if not (has_shield_active and shield_charge_count > 0): 
-                                game_state = STATE_ANIMATING_DEATH
-                                death_animation_timer = PARTICLE_LIFETIME
-                                breaking_particles = generate_explosion_particles(ball_pos, ball_radius, BALL_COLOR_FLAT)
-                                return 
-                            else: # Shield active: Obstacle breaks, game continues
-                                is_obstacle_breaking_active = True 
-                                death_animation_timer = PARTICLE_LIFETIME
-                                mobstacle_center_pos = [mob_x_center_absolute, mob_y_bottom + MOVING_OBSTACLE_HEIGHT/2.0, mob_z_center]
-                                breaking_particles = generate_explosion_particles(mobstacle_center_pos, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_COLOR)
-                                current_segment['moving_obstacles'].pop(mobstacle_idx) 
-                                return 
-                        
-            # Point Collection (only if grounded)
-            if current_segment.get('points'):
-                for i in range(len(current_segment['points']) -1, -1, -1):
-                    point = current_segment['points'][i]
-                    point_x, point_y, point_z = point['x'], point['y'], point['z']
-                    
-                    distance_sq = (point_x - ball_pos[0])**2 + \
-                                  (point_y - ball_pos[1])**2 + \
-                                  (point_z - ball_pos[2])**2
-                    
-                    if distance_sq < (ball_radius + POINT_SIZE / 2.0)**2:
-                        player_score += score_multiplier
-                        current_segment['points'].pop(i)
-
-            # Double Jump Power-up Collection
-            if current_segment.get('double_jump_powerups') and not has_double_jump_charge:
-                for i in range(len(current_segment['double_jump_powerups']) - 1, -1, -1):
-                    powerup = current_segment['double_jump_powerups'][i]
-                    dist_sq = (powerup['x'] - ball_pos[0])**2 + \
-                              (powerup['y'] + point_hover_offset - ball_pos[1])**2 + \
-                              (powerup['z'] - ball_pos[2])**2
-                    if dist_sq < (ball_radius + DOUBLE_JUMP_SIZE / 2.0)**2:
-                        has_double_jump_charge = True
-                        double_jump_timer = DOUBLE_JUMP_DURATION
-                        current_segment['double_jump_powerups'].pop(i)
-                        break
-            
-            # Multiplier Pickup Collection
-            if current_segment.get('multiplier_pickups'):
-                for i in range(len(current_segment['multiplier_pickups']) - 1, -1, -1):
-                    pickup = current_segment['multiplier_pickups'][i]
-                    dist_sq = (pickup['x'] - ball_pos[0])**2 + \
-                              (pickup['y'] + point_hover_offset - ball_pos[1])**2 + \
-                              (pickup['z'] - ball_pos[2])**2
-                    if dist_sq < (ball_radius + MULTIPLIER_SIZE / 2.0)**2:
-                        score_multiplier = MULTIPLIER_FACTOR
-                        multiplier_timer = MULTIPLIER_DURATION
-                        current_segment['multiplier_pickups'].pop(i)
-                        break
-            
-            # Boost Pad Collision
-            if current_segment.get('boost_pads'):
-                for boost_pad in current_segment['boost_pads']:
-                    if boost_pad['active']:
-                        lane_x_left = x_offset - (num_lanes * base_lane_width / 2.0) + (boost_pad['lane_idx'] * base_lane_width)
-                        lane_x_right = lane_x_left + base_lane_width
-                        
-                        is_over_boost_x = (ball_pos[0] >= lane_x_left - ball_radius) and (ball_pos[0] <= lane_x_right + ball_radius)
-                        is_over_boost_z = (ball_pos[2] >= boost_pad['z_start'] - ball_radius) and (ball_pos[2] <= boost_pad['z_end'] + ball_radius)
-                        
-                        if is_over_boost_x and is_over_boost_z:
-                            is_boost_active = True
-                            forward_speed *= BOOST_PAD_SPEED_BOOST 
-                            boost_timer = BOOST_DURATION
-                            boost_pad['active'] = False 
-                            break 
-
-            # Shield Pickup Collection
-            if current_segment.get('shields'):
-                for i in range(len(current_segment['shields']) - 1, -1, -1):
-                    shield_icon = current_segment['shields'][i]
-                    dist_sq = (shield_icon['x'] - ball_pos[0])**2 + \
-                              (shield_icon['y'] + point_hover_offset - ball_pos[1])**2 + \
-                              (shield_icon['z'] - ball_pos[2])**2
-                    if dist_sq < (ball_radius + SHIELD_SIZE / 2.0)**2:
-                        has_shield_active = True
-                        shield_charge_count += 1
-                        shield_timer = SHIELD_DURATION 
-                        current_segment['shields'].pop(i)
-                        break
-
-        # --- Ultimate Game Over Condition (Falling below defined threshold) ---
-        if ball_pos[1] < fall_threshold_y:
-            game_state = STATE_ANIMATING_DEATH
-            death_animation_timer = PARTICLE_LIFETIME
-            breaking_particles = generate_explosion_particles(ball_pos, ball_radius, BALL_COLOR_FLAT)
-            return 
-        
-        glutPostRedisplay()
-
-
-    # --- State: Animating Death (for ball or obstacles) ---
-    elif game_state == STATE_ANIMATING_DEATH:
-        death_animation_timer -= dt
-        if death_animation_timer <= 0:
-            breaking_particles = [] 
-            # Check if this animation was for an obstacle break or ball death
-            if is_obstacle_breaking_active: ### CRITICAL FIX: Distinguish between ball death and obstacle break ###
-                is_obstacle_breaking_active = False # Reset flag
-                game_state = STATE_PLAYING # Resume play
-                # Important: Ball physics should not be reset, it should continue from current state.
-                # If it was falling, it continues falling. If it was grounded, it stays grounded.
-            else: # It was the ball's death animation
-                game_state = STATE_GAME_OVER 
-                game_over = True # True Game Over
-        else:
-            for particle in breaking_particles:
-                particle['vy'] += GRAVITY * dt 
-                particle['x'] += particle['vx'] * dt
-                particle['y'] += particle['vy'] * dt 
-                particle['z'] += particle['vz'] * dt
-                particle['lifetime_remaining'] -= dt
-        glutPostRedisplay()
-
-    elif game_state == STATE_GAME_OVER:
-        glutPostRedisplay()
 
 
 def draw_shields(): ### CRITICAL COMPLIANCE FIX: Compliant Shield Icon ###
@@ -1759,19 +1127,19 @@ def draw_shields(): ### CRITICAL COMPLIANCE FIX: Compliant Shield Icon ###
                 # --- Draw compliant hexagon base (using 2 rotated cubes) ---
                 # This is a visual approximation of a hexagon using cubes, for compliance.
                 glPushMatrix()
-                glScalef(1.0, 0.5, 1.0) # Flatten one cube
+                
                 glutSolidCube(current_size)
                 glPopMatrix()
                 
                 glPushMatrix()
                 glRotatef(60, 0, 1, 0) # Rotate another to form a hexagon approximation
-                glScalef(1.0, 0.5, 1.0)
+                
                 glutSolidCube(current_size)
                 glPopMatrix()
 
                 glPushMatrix()
                 glRotatef(-60, 0, 1, 0) # Rotate another
-                glScalef(1.0, 0.5, 1.0)
+                
                 glutSolidCube(current_size)
                 glPopMatrix()
 
@@ -1821,7 +1189,7 @@ def draw_breaking_particles(): ### CRITICAL FIX: Universal particle drawing ###
         
         glPopMatrix() 
 
-def draw_powerup_status(): ### CRITICAL FIX: Top-left positioning for power-up status ###
+def draw_powerup_status(): 
     """
     Draws the active/inactive status of various power-ups on the HUD in the top-left.
     """
@@ -1855,7 +1223,7 @@ def draw_powerup_status(): ### CRITICAL FIX: Top-left positioning for power-up s
     
     glColor3f(1,1,1) # Final reset color
 
-def generate_explosion_particles(origin_pos, original_radius, color): ### NEW HELPER FUNCTION ###
+def generate_explosion_particles(origin_pos, original_radius, color): 
     """
     Generates a list of particles for a ball breaking explosion.
     """
@@ -1887,7 +1255,7 @@ def generate_explosion_particles(origin_pos, original_radius, color): ### NEW HE
     return particles
 
     
-def draw_background(): ### MODIFIED: Removed gluDeleteQuadric ###
+def draw_background():
     """
     Draws the procedurally generated background elements (stars/nebula particles).
     """
@@ -1911,19 +1279,17 @@ def draw_background(): ### MODIFIED: Removed gluDeleteQuadric ###
         gluSphere(quad, el['size'], 8, 8)
         glPopMatrix()
     
-    # REMOVED: gluDeleteQuadric(quad) # Removed for strict compliance
+    
 
-def idle(): ### CRITICAL, COMPREHENSIVE FIX: Obstacle Animation, Physics, State Flow ###
-    """
-    The main game loop logic, now driven by a game_state machine.
-    """
+def idle():
     global last_time_ms, ball_pos, is_falling, game_over, is_grounded, game_state
     global fall_velocity_x, fall_velocity_y, last_platform_tile_z_end, death_animation_timer
     global keys_pressed, breaking_particles, player_score, ball_rotation_angle
     global point_pulse_scale, point_pulse_time, point_hover_offset
     global has_double_jump_charge, double_jump_timer, score_multiplier, multiplier_timer, is_boost_active, boost_timer, forward_speed 
     global has_shield_active, shield_charge_count, shield_timer 
-    global is_obstacle_breaking_active # Access the global flag for obstacle animation
+    global is_obstacle_breaking_active
+    global previous_ball_z
 
     now = glutGet(GLUT_ELAPSED_TIME)
     if last_time_ms is None: last_time_ms = now
@@ -1931,327 +1297,256 @@ def idle(): ### CRITICAL, COMPREHENSIVE FIX: Obstacle Animation, Physics, State 
     dt = (now - last_time_ms) / 1000.0
     last_time_ms = now
 
+    # --- START: BACKGROUND SCROLLING LOGIC (WORKING) ---
+    delta_z_ball = ball_pos[2] - previous_ball_z
+    previous_ball_z = ball_pos[2]
+    for el in background_elements_distant:
+        el['z'] += delta_z_ball * BG_SCROLL_FACTOR_DISTANT
+        if el['z'] > ball_pos[2]:
+            el['z'] -= BG_Z_ACTIVE_RANGE
+    for el in background_elements_mid:
+        el['z'] += delta_z_ball * BG_SCROLL_FACTOR_MID
+        if el['z'] > ball_pos[2]:
+            el['z'] -= BG_Z_ACTIVE_RANGE
+    # --- END: BACKGROUND SCROLLING LOGIC (WORKING) ---
+
     # --- Game State Machine Logic ---
     if game_state == STATE_PLAYING:
         # --- Point Pulsation Update ---
         point_pulse_time += dt * POINT_PULSE_SPEED
         pulse_factor = (math.sin(point_pulse_time) + 1.0) / 2.0 
         point_pulse_scale = POINT_PULSE_MIN_SCALE + (POINT_PULSE_MAX_SCALE - POINT_PULSE_MIN_SCALE) * pulse_factor
-        point_hover_offset = math.sin(point_pulse_time * 1.5) * 2.0 
+        point_hover_offset = math.sin(point_pulse_time * 1.5) * 2.0
 
-        # --- Update Multiplier Timer ---
+        # --- Update Power-up Timers ---
         if multiplier_timer > 0:
             multiplier_timer -= dt
-            if multiplier_timer <= 0:
-                score_multiplier = 1 
-        
-        # --- Update Boost Timer ---
+            if multiplier_timer <= 0: score_multiplier = 1
         if is_boost_active:
             boost_timer -= dt
             if boost_timer <= 0:
                 is_boost_active = False
-                forward_speed = -500.0 
-
-        # --- Double Jump Timer ---
+                forward_speed = -500.0
         if double_jump_timer > 0:
             double_jump_timer -= dt
-            if double_jump_timer <= 0:
-                has_double_jump_charge = False
-
-        # --- Update Shield Timer ---
+            if double_jump_timer <= 0: has_double_jump_charge = False
         if has_shield_active and shield_charge_count > 0:
             shield_timer -= dt
             if shield_timer <= 0:
-                shield_charge_count -= 1 
-                if shield_charge_count == 0:
-                    has_shield_active = False 
-                else: 
-                    shield_timer = SHIELD_DURATION
+                shield_charge_count -= 1
+                if shield_charge_count == 0: has_shield_active = False
+                else: shield_timer = SHIELD_DURATION
 
-        # --- 1. Apply Physics (Vertical) ---
-        # Gravity always applies if not grounded
+        # --- Physics and Movement ---
         if not is_grounded:
-            fall_velocity_y += GRAVITY * dt 
+            fall_velocity_y += GRAVITY * dt
         ball_pos[1] += fall_velocity_y * dt
-        
-        # Apply sideways drift only if ball is actively falling off an edge/hole
-        if is_falling: 
-            ball_pos[0] += fall_velocity_x * dt    
-
-        # --- 2. Handle Player Input and Forward Motion ---
-        if not is_falling: # Only allow input/movement if not actively falling due to edge/hole
+        if is_falling:
+            ball_pos[0] += fall_velocity_x * dt
+        if not is_falling:
             if keys_pressed.get(b'a'): ball_pos[0] -= ball_lateral_speed * dt
             if keys_pressed.get(b'd'): ball_pos[0] += ball_lateral_speed * dt
-
         ball_pos[2] += forward_speed * dt
-
-        # Update ball rotation angle for rolling effect
         distance_moved = abs(forward_speed * dt)
         circumference = 2 * math.pi * ball_radius
-        ball_rotation_angle += (distance_moved / circumference) * 360.0
-        ball_rotation_angle %= 360.0
+        ball_rotation_angle = (ball_rotation_angle + (distance_moved / circumference) * 360.0) % 360.0
 
-        # --- 3. Continuous Platform Generation ---
+        # --- Platform Generation ---
         if ball_pos[2] < last_platform_tile_z_end + platform_segment_length * (num_visible_tiles / 2):
             last_segment = platform_segments[-1] if platform_segments else None
             generate_platform_tile(last_segment)
-            if platform_segments and platform_segments[0]['start_z'] > ball_pos[2] + camera_distance * 2:
+            if platform_segments and ball_pos[2] < platform_segments[0]['end_z'] - (ball_radius * 2):
                 platform_segments.pop(0)
 
-        # --- 4. Process Moving Obstacles ---
+        # --- Moving Obstacle Updates ---
         for segment in platform_segments:
             if segment.get('moving_obstacles'):
-                num_lanes_seg, x_offset_seg, y_level_seg = segment['config']
-                segment_x_left_boundary, segment_x_right_boundary = get_full_lane_x_coords(num_lanes_seg, x_offset_seg)
+                num_lanes, x_offset, _ = segment['config']
+                x_left, x_right = get_full_lane_x_coords(num_lanes, x_offset)
+                for mob in segment['moving_obstacles']:
+                    mob['x_pos_current_absolute'] += MOVING_OBSTACLE_SPEED * mob['direction'] * dt
+                    if mob['x_pos_current_absolute'] - MOVING_OBSTACLE_RADIUS < x_left or \
+                       mob['x_pos_current_absolute'] + MOVING_OBSTACLE_RADIUS > x_right:
+                        mob['direction'] *= -1
 
-                for mobstacle in segment['moving_obstacles']:
-                    mob_x_current_absolute = mobstacle['x_pos_current_absolute']
-                    mob_direction = mobstacle['direction']
-
-                    mobstacle['x_pos_current_absolute'] += MOVING_OBSTACLE_SPEED * mob_direction * dt
-
-                    mob_actual_x_left_edge = mob_x_current_absolute - MOVING_OBSTACLE_RADIUS
-                    mob_actual_x_right_edge = mob_x_current_absolute + MOVING_OBSTACLE_RADIUS
-
-                    if mob_actual_x_left_edge < segment_x_left_boundary or \
-                       mob_actual_x_right_edge > segment_x_right_boundary:
-                        mobstacle['direction'] *= -1
-                        if mob_actual_x_left_edge < segment_x_left_boundary:
-                            mobstacle['x_pos_current_absolute'] = segment_x_left_boundary + MOVING_OBSTACLE_RADIUS
-                        elif mob_actual_x_right_edge > segment_x_right_boundary:
-                            mobstacle['x_pos_current_absolute'] = segment_x_right_boundary - MOVING_OBSTACLE_RADIUS
-                            
-        # --- 5. Find Current Segment and Determine Grounding/Falling State ---
-        is_grounded_this_frame_candidate = False 
-        
+        # --- Grounding and Collision Logic ---
         current_segment = None
         for segment in platform_segments:
             if segment['end_z'] - 1 < ball_pos[2] <= segment['start_z'] + 1:
                 current_segment = segment
-                break 
+                break
         
-        # --- Determine `is_grounded` and `is_falling` status ---
+        is_grounded_this_frame = False
         if current_segment:
-            target_ball_y_center = FLOOR_Y + ball_radius
             num_lanes, x_offset, _ = current_segment['config']
-            playable_x_left, playable_x_right = get_full_lane_x_coords(num_lanes, x_offset)
-
-            is_over_platform_x_solid_ground = (ball_pos[0] >= playable_x_left - ball_radius * 0.5 and 
-                                               ball_pos[0] <= playable_x_right + ball_radius * 0.5)
-
-            ball_is_over_hole = False
-            if current_segment['hole_lanes']:
-                x_relative = ball_pos[0] - playable_x_left
-                lane_index = int(x_relative / base_lane_width)
-                if 0 <= lane_index < num_lanes and lane_index in current_segment['hole_lanes']:
-                    ball_is_over_hole = True
-            
-            # --- Primary Grounding Condition ---
-            # Ball is over solid ground, NOT a hole, AND its Y is at or below the platform's top surface.
-            if is_over_platform_x_solid_ground and not ball_is_over_hole and ball_pos[1] <= target_ball_y_center + PLATFORM_Y_SNAP_TOLERANCE:
-                is_grounded_this_frame_candidate = True
+            x_left, x_right = get_full_lane_x_coords(num_lanes, x_offset)
+            is_over_x = x_left <= ball_pos[0] <= x_right
+            lane_idx = int((ball_pos[0] - x_left) / base_lane_width)
+            is_over_hole = 0 <= lane_idx < num_lanes and lane_idx in current_segment['hole_lanes']
+            if is_over_x and not is_over_hole and ball_pos[1] <= FLOOR_Y + ball_radius + PLATFORM_Y_SNAP_TOLERANCE:
+                is_grounded_this_frame = True
         
-        # --- Apply Grounding State & Snap ---
-        if is_grounded_this_frame_candidate: 
-            if not is_grounded: # Just landed
-                is_grounded = True
-                is_falling = False 
-                fall_velocity_y = 0.0 
-                ball_pos[1] = target_ball_y_center 
-            else: # Already grounded
-                ball_pos[1] = target_ball_y_center 
-        else: # Not on solid ground or too high - Ball should be in air (jumping or falling)
-            if is_grounded: # Just left ground this frame
-                is_grounded = False
-                is_falling = True 
-                fall_velocity_y = 0.0 
-                if current_segment:
-                    playable_x_left, playable_x_right = get_full_lane_x_coords(current_segment['config'][CONFIG_NUM_LANES], current_segment['config'][CONFIG_X_OFFSET])
-                    if ball_pos[0] < playable_x_left: fall_velocity_x = -100.0
-                    elif ball_pos[0] > playable_x_right: fall_velocity_x = 100.0
-                    else: fall_velocity_x = 0.0
-                else: 
-                    fall_velocity_x = 100.0 if ball_pos[0] > 0 else -100.0
-            
-        # --- Collision Checks (Only if currently grounded) ---
-        if is_grounded: 
-            # Static Obstacle Collision
+        if is_grounded_this_frame:
+            if not is_grounded: is_falling = False
+            is_grounded = True
+            ball_pos[1] = FLOOR_Y + ball_radius
+            fall_velocity_y = 0.0
+        else:
+            if is_grounded: is_falling = True
+            is_grounded = False
+
+        if is_grounded and current_segment:
+            num_lanes, x_offset, _ = current_segment['config'] # Needed for boost pad
+
+            # --- START: FULLY RESTORED COLLISION LOGIC ---
+
+            # Static Obstacle Collision (Restored Sphere-to-Cube Check)
             if current_segment.get('obstacles'):
                 for obstacle_idx, obstacle in enumerate(current_segment['obstacles']):
-                    obs_x_center = obstacle['world_x']
-                    obs_y_center = obstacle['world_y_top'] - obstacle['size'] / 2.0
-                    obs_z_center = obstacle['world_z']
-                    
-                    closest_x = max(obs_x_center - obstacle['size'] / 2.0, min(ball_pos[0], obs_x_center + obstacle['size'] / 2.0))
-                    closest_y = max(obs_y_center - obstacle['size'] / 2.0, min(ball_pos[1], obs_y_center + obstacle['size'] / 2.0))
-                    closest_z = max(obs_z_center - obstacle['size'] / 2.0, min(ball_pos[2], obs_z_center + obstacle['size'] / 2.0))
-                    
-                    distance_sq = (closest_x - ball_pos[0])**2 + (closest_y - ball_pos[1])**2 + (closest_z - ball_pos[2])**2
-                    
-                    if distance_sq < (ball_radius**2):
-                        if has_shield_active and shield_charge_count > 0:
-                            is_obstacle_breaking_active = True 
-                            death_animation_timer = PARTICLE_LIFETIME 
-                            obstacle_center_pos = [obs_x_center, obs_y_center, obs_z_center]
-                            breaking_particles = generate_explosion_particles(obstacle_center_pos, obstacle['size']/2.0, OBSTACLE_COLOR) 
-                            current_segment['obstacles'].pop(obstacle_idx) 
-                            return 
-                        else: # No shield: Ball breaks, Game Over
+                    obs_x, obs_y, obs_z = obstacle['world_x'], obstacle['world_y_top'] - obstacle['size'] / 2.0, obstacle['world_z']
+                    closest_x = max(obs_x - obstacle['size'] / 2.0, min(ball_pos[0], obs_x + obstacle['size'] / 2.0))
+                    closest_y = max(obs_y - obstacle['size'] / 2.0, min(ball_pos[1], obs_y + obstacle['size'] / 2.0))
+                    closest_z = max(obs_z - obstacle['size'] / 2.0, min(ball_pos[2], obs_z + obstacle['size'] / 2.0))
+                    dist_sq = (closest_x - ball_pos[0])**2 + (closest_y - ball_pos[1])**2 + (closest_z - ball_pos[2])**2
+                    if dist_sq < (ball_radius**2):
+                        if has_shield_active:
+                            is_obstacle_breaking_active = True
+                            death_animation_timer = PARTICLE_LIFETIME
+                            breaking_particles = generate_explosion_particles([obs_x, obs_y, obs_z], obstacle['size']/2.0, OBSTACLE_COLOR)
+                            current_segment['obstacles'].pop(obstacle_idx)
+                        else:
                             game_state = STATE_ANIMATING_DEATH
                             death_animation_timer = PARTICLE_LIFETIME
                             breaking_particles = generate_explosion_particles(ball_pos, ball_radius, BALL_COLOR_FLAT)
-                            return 
+                        return
 
-            # Moving Obstacle Collision
+            # Moving Obstacle Collision (Restored Sphere-to-Cylinder Check)
             if current_segment.get('moving_obstacles'):
-                for mobstacle_idx, mobstacle in enumerate(current_segment['moving_obstacles']):
-                    mob_z_factor = mobstacle['z_pos_factor']
-                    mob_x_center_absolute = mobstacle['x_pos_current_absolute']
-                    
-                    mob_y_bottom = FLOOR_Y
-                    mob_y_top = FLOOR_Y + MOVING_OBSTACLE_HEIGHT
-                    mob_z_center = current_segment['start_z'] + (current_segment['end_z'] - current_segment['start_z']) * mob_z_factor
+                for mobstacle_idx, mob in enumerate(current_segment['moving_obstacles']):
+                    mob_z = current_segment['start_z'] + (current_segment['end_z'] - current_segment['start_z']) * mob['z_pos_factor']
+                    dist_xz_sq = (ball_pos[0] - mob['x_pos_current_absolute'])**2 + (ball_pos[2] - mob_z)**2
+                    if dist_xz_sq < (ball_radius + MOVING_OBSTACLE_RADIUS)**2 and ball_pos[1] < FLOOR_Y + MOVING_OBSTACLE_HEIGHT:
+                        if has_shield_active:
+                            is_obstacle_breaking_active = True
+                            death_animation_timer = PARTICLE_LIFETIME
+                            breaking_particles = generate_explosion_particles([mob['x_pos_current_absolute'], FLOOR_Y + MOVING_OBSTACLE_HEIGHT/2.0, mob_z], MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_COLOR)
+                            current_segment['moving_obstacles'].pop(mobstacle_idx)
+                        else:
+                            game_state = STATE_ANIMATING_DEATH
+                            death_animation_timer = PARTICLE_LIFETIME
+                            breaking_particles = generate_explosion_particles(ball_pos, ball_radius, BALL_COLOR_FLAT)
+                        return
 
-                    closest_x_on_axis = mob_x_center_absolute
-                    closest_y_on_axis = max(mob_y_bottom, min(ball_pos[1], mob_y_top))
-                    closest_z_on_axis = mob_z_center
-
-                    dist_xz_sq = (ball_pos[0] - closest_x_on_axis)**2 + \
-                                 (ball_pos[2] - closest_z_on_axis)**2
-
-                    if dist_xz_sq < (ball_radius + MOVING_OBSTACLE_RADIUS)**2:
-                        if ball_pos[1] + ball_radius > mob_y_bottom and ball_pos[1] - ball_radius < mob_y_top:
-                            if not (has_shield_active and shield_charge_count > 0): 
-                                game_state = STATE_ANIMATING_DEATH
-                                death_animation_timer = PARTICLE_LIFETIME
-                                breaking_particles = generate_explosion_particles(ball_pos, ball_radius, BALL_COLOR_FLAT)
-                                return 
-                            else: # Shield active: Obstacle breaks, game continues
-                                is_obstacle_breaking_active = True 
-                                death_animation_timer = PARTICLE_LIFETIME
-                                mobstacle_center_pos = [mob_x_center_absolute, mob_y_bottom + MOVING_OBSTACLE_HEIGHT/2.0, mob_z_center]
-                                breaking_particles = generate_explosion_particles(mobstacle_center_pos, MOVING_OBSTACLE_RADIUS, MOVING_OBSTACLE_COLOR)
-                                current_segment['moving_obstacles'].pop(mobstacle_idx) 
-                                return 
-                        
-            # Point Collection (only if grounded)
+            # Point Collection (Restored Distance Check)
             if current_segment.get('points'):
-                for i in range(len(current_segment['points']) -1, -1, -1):
+                for i in range(len(current_segment['points']) - 1, -1, -1):
                     point = current_segment['points'][i]
-                    point_x, point_y, point_z = point['x'], point['y'], point['z']
-                    
-                    distance_sq = (point_x - ball_pos[0])**2 + \
-                                  (point_y - ball_pos[1])**2 + \
-                                  (point_z - ball_pos[2])**2
-                    
-                    if distance_sq < (ball_radius + POINT_SIZE / 2.0)**2:
+                    dist_sq = (point['x'] - ball_pos[0])**2 + (point['y'] - ball_pos[1])**2 + (point['z'] - ball_pos[2])**2
+                    if dist_sq < (ball_radius + POINT_SIZE / 2.0)**2:
                         player_score += score_multiplier
                         current_segment['points'].pop(i)
 
-            # Double Jump Power-up Collection
-            if current_segment.get('double_jump_powerups') and not has_double_jump_charge:
+            # Double Jump, Multiplier, Shield Collection (Restored Distance Check)
+            if current_segment.get('double_jump_powerups'):
                 for i in range(len(current_segment['double_jump_powerups']) - 1, -1, -1):
-                    powerup = current_segment['double_jump_powerups'][i]
-                    dist_sq = (powerup['x'] - ball_pos[0])**2 + \
-                              (powerup['y'] + point_hover_offset - ball_pos[1])**2 + \
-                              (powerup['z'] - ball_pos[2])**2
+                    p = current_segment['double_jump_powerups'][i]
+                    dist_sq = (p['x'] - ball_pos[0])**2 + (p['y'] + point_hover_offset - ball_pos[1])**2 + (p['z'] - ball_pos[2])**2
                     if dist_sq < (ball_radius + DOUBLE_JUMP_SIZE / 2.0)**2:
                         has_double_jump_charge = True
                         double_jump_timer = DOUBLE_JUMP_DURATION
                         current_segment['double_jump_powerups'].pop(i)
                         break
-            
-            # Multiplier Pickup Collection
             if current_segment.get('multiplier_pickups'):
                 for i in range(len(current_segment['multiplier_pickups']) - 1, -1, -1):
-                    pickup = current_segment['multiplier_pickups'][i]
-                    dist_sq = (pickup['x'] - ball_pos[0])**2 + \
-                              (pickup['y'] + point_hover_offset - ball_pos[1])**2 + \
-                              (pickup['z'] - ball_pos[2])**2
+                    p = current_segment['multiplier_pickups'][i]
+                    dist_sq = (p['x'] - ball_pos[0])**2 + (p['y'] + point_hover_offset - ball_pos[1])**2 + (p['z'] - ball_pos[2])**2
                     if dist_sq < (ball_radius + MULTIPLIER_SIZE / 2.0)**2:
                         score_multiplier = MULTIPLIER_FACTOR
                         multiplier_timer = MULTIPLIER_DURATION
                         current_segment['multiplier_pickups'].pop(i)
                         break
-            
-            # Boost Pad Collision
-            if current_segment.get('boost_pads'):
-                for boost_pad in current_segment['boost_pads']:
-                    if boost_pad['active']:
-                        lane_x_left = x_offset - (num_lanes * base_lane_width / 2.0) + (boost_pad['lane_idx'] * base_lane_width)
-                        lane_x_right = lane_x_left + base_lane_width
-                        
-                        is_over_boost_x = (ball_pos[0] >= lane_x_left - ball_radius) and (ball_pos[0] <= lane_x_right + ball_radius)
-                        is_over_boost_z = (ball_pos[2] >= boost_pad['z_start'] - ball_radius) and (ball_pos[2] <= boost_pad['z_end'] + ball_radius)
-                        
-                        if is_over_boost_x and is_over_boost_z:
-                            is_boost_active = True
-                            forward_speed *= BOOST_PAD_SPEED_BOOST 
-                            boost_timer = BOOST_DURATION
-                            boost_pad['active'] = False 
-                            break 
-
-            # Shield Pickup Collection
             if current_segment.get('shields'):
                 for i in range(len(current_segment['shields']) - 1, -1, -1):
-                    shield_icon = current_segment['shields'][i]
-                    dist_sq = (shield_icon['x'] - ball_pos[0])**2 + \
-                              (shield_icon['y'] + point_hover_offset - ball_pos[1])**2 + \
-                              (shield_icon['z'] - ball_pos[2])**2
+                    p = current_segment['shields'][i]
+                    dist_sq = (p['x'] - ball_pos[0])**2 + (p['y'] + point_hover_offset - ball_pos[1])**2 + (p['z'] - ball_pos[2])**2
                     if dist_sq < (ball_radius + SHIELD_SIZE / 2.0)**2:
                         has_shield_active = True
                         shield_charge_count += 1
-                        shield_timer = SHIELD_DURATION 
+                        shield_timer = SHIELD_DURATION
                         current_segment['shields'].pop(i)
                         break
 
-        # --- Ultimate Game Over Condition (Falling below defined threshold) ---
+                        # Boost Pad Collision
+            if current_segment.get('boost_pads'):
+                for boost_pad in current_segment['boost_pads']:
+                    if boost_pad['active']:
+                        # --- These lines calculate the X-axis boundaries ---
+                        lane_x_left = x_offset - (num_lanes * base_lane_width / 2.0) + (boost_pad['lane_idx'] * base_lane_width)
+                        lane_x_right = lane_x_left + base_lane_width
+                        is_over_boost_x = (ball_pos[0] > lane_x_left - ball_radius) and (ball_pos[0] < lane_x_right + ball_radius)
+                        
+                        # --- THIS IS THE CORRECTED LINE FOR THE Z-AXIS ---
+                        is_over_boost_z = (ball_pos[2] <= boost_pad['z_end'] + ball_radius) and (ball_pos[2] >= boost_pad['z_start'] - ball_radius)
+
+                        # --- The rest of the logic remains the same ---
+                        if is_over_boost_x and is_over_boost_z:
+                            is_boost_active = True
+                            forward_speed *= BOOST_PAD_SPEED_BOOST
+                            boost_timer = BOOST_DURATION
+                            boost_pad['active'] = False
+                            break
+            # --- END: FULLY RESTORED COLLISION LOGIC ---
+
+        # --- Game Over Condition ---
         if ball_pos[1] < fall_threshold_y:
             game_state = STATE_ANIMATING_DEATH
             death_animation_timer = PARTICLE_LIFETIME
             breaking_particles = generate_explosion_particles(ball_pos, ball_radius, BALL_COLOR_FLAT)
-            return 
-        
-        glutPostRedisplay()
+            return
 
-
+    # --- Other Game States ---
     elif game_state == STATE_ANIMATING_DEATH:
         death_animation_timer -= dt
         if death_animation_timer <= 0:
-            breaking_particles = [] 
-            # Check if this animation was for an obstacle break or ball death
-            if is_obstacle_breaking_active: # If it was an obstacle breaking, resume play
-                is_obstacle_breaking_active = False # Reset flag
-                game_state = STATE_PLAYING # Resume playing
-            else: # It was the ball's death animation
-                game_state = STATE_GAME_OVER 
-                game_over = True 
+            breaking_particles = []
+            if is_obstacle_breaking_active:
+                is_obstacle_breaking_active = False
+                game_state = STATE_PLAYING
+            else:
+                game_state = STATE_GAME_OVER
+                game_over = True
         else:
-            for particle in breaking_particles:
-                particle['vy'] += GRAVITY * dt 
-                particle['x'] += particle['vx'] * dt
-                particle['y'] += particle['vy'] * dt 
-                particle['z'] += particle['vz'] * dt
-                particle['lifetime_remaining'] -= dt
-        glutPostRedisplay()
+            for p in breaking_particles:
+                p['vy'] += GRAVITY * dt
+                p['x'] += p['vx'] * dt
+                p['y'] += p['vy'] * dt
+                p['z'] += p['vz'] * dt
+                p['lifetime_remaining'] -= dt
 
-    elif game_state == STATE_GAME_OVER:
-        glutPostRedisplay()
-
+    glutPostRedisplay()
 
 # ---------- Render ----------
 
 
 
 # Background Starfield Generation Helper
+# Background Starfield Generation Helper
 def generate_background_elements():
+    """
+    Generates the initial positions for the background elements.
+    They are placed in a large block directly behind the player's starting Z-position.
+    """
     global background_elements_distant, background_elements_mid
-    start_z_offset = ball_pos[2] - camera_distance - BG_Z_ACTIVE_RANGE / 2 
+    
+    # Use the ball's current Z-position as the "front" of our background zone.
+    start_z_offset = ball_pos[2] 
+    
     background_elements_distant = []
     for _ in range(NUM_BG_ELEMENTS_DISTANT):
-        x = random.uniform(-BG_X_RANGE / 2, BG_X_RANGE / 2)
+        x = random.uniform(-BG_X_RANGE, BG_X_RANGE)
         y = random.uniform(FLOOR_Y + platform_thickness, FLOOR_Y + BG_Y_RANGE)
-        z = random.uniform(start_z_offset, start_z_offset + BG_Z_ACTIVE_RANGE)
+        # Place stars in a Z-range from the player's position extending backwards.
+        z = random.uniform(start_z_offset - BG_Z_ACTIVE_RANGE, start_z_offset)
         size = random.uniform(BG_MIN_SIZE, BG_MIN_SIZE * 2)
         t = random.random()
         color = (
@@ -2260,11 +1555,12 @@ def generate_background_elements():
             BG_COLOR_BASE1[2] * (1-t) + BG_COLOR_BASE2[2] * t
         )
         background_elements_distant.append({'x': x, 'y': y, 'z': z, 'size': size, 'color': color})
+
     background_elements_mid = []
     for _ in range(NUM_BG_ELEMENTS_MID):
-        x = random.uniform(-BG_X_RANGE / 2, BG_X_RANGE / 2)
+        x = random.uniform(-BG_X_RANGE, BG_X_RANGE)
         y = random.uniform(FLOOR_Y + platform_thickness, FLOOR_Y + BG_Y_RANGE)
-        z = random.uniform(start_z_offset, start_z_offset + BG_Z_ACTIVE_RANGE)
+        z = random.uniform(start_z_offset - BG_Z_ACTIVE_RANGE, start_z_offset)
         size = random.uniform(BG_MIN_SIZE * 1.5, BG_MAX_SIZE)
         t = random.random()
         color = (
@@ -2274,7 +1570,7 @@ def generate_background_elements():
         )
         background_elements_mid.append({'x': x, 'y': y, 'z': z, 'size': size, 'color': color})
 
-def showScreen(): ### CRITICAL FIX: Obstacle Animation Drawing and Clean HUD ###
+def showScreen(): 
     """Display function to render the game scene with robust state management."""
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -2301,14 +1597,10 @@ def showScreen(): ### CRITICAL FIX: Obstacle Animation Drawing and Clean HUD ###
     draw_boost_pads() 
     draw_shields()
 
-    # --- CRITICAL FIX: Draw ball and / or particles based on state ---
     if game_state == STATE_PLAYING: 
         draw_ball_shadow() 
         draw_ball()
-        # If an obstacle is currently breaking *during playing*, draw its particles
-        if is_obstacle_breaking_active and breaking_particles:
-            draw_breaking_particles()
-    elif game_state == STATE_ANIMATING_DEATH: # This means the ball is breaking OR an obstacle finished breaking and we're about to resume
+    elif game_state == STATE_ANIMATING_DEATH:
         draw_breaking_particles() 
     
     glPopMatrix()
@@ -2337,37 +1629,34 @@ def showScreen(): ### CRITICAL FIX: Obstacle Animation Drawing and Clean HUD ###
               f"Ball: x={ball_pos[0]:.1f}, y={ball_pos[1]:.1f}, z={ball_pos[2]:.1f}")
               
     draw_text(hud_left_x, WINDOW_H - hud_line_spacing * 2, 
-              "Controls: A/D = steer, SPACE = Jump , R = Reset")
+              "Controls: A/D = steer, SPACE = Jump , R = Reset") ### MODIFIED: Updated controls text ###
     
     score_text = f"Score: {player_score}"
     score_text_width_approx = len(score_text) * 10 
     draw_text(WINDOW_W - score_text_width_approx - hud_left_x, WINDOW_H - hud_line_spacing, 
               score_text)
     
-    # REMOVED: Debug text (platform_segments[0]['debug_text']) - as per request
-    # No, it was requested to KEEP the debug text, but remove the duplicate.
-    # The previous code correctly places it at hud_line_spacing * 4
-    # Re-adding if statement for debug text based on your previous valid code.
+    # This ensures it's drawn only once.
     if platform_segments:
-        draw_text(hud_left_x, WINDOW_H - hud_line_spacing * 4, 
-                  platform_segments[0]['debug_text'])
+        # draw_text(hud_left_x, WINDOW_H - hud_line_spacing * 3, ### MODIFIED: Adjusted Y position ###
+                #   platform_segments[0]['debug_text'])
+        pass
 
-    # NEW: Draw power-up status
+    # Draw power-up status
     draw_powerup_status()
 
     if game_state == STATE_GAME_OVER: 
         game_over_text = "GAME OVER!"
         restart_text = "Press 'R' to Restart"
         
-        game_over_width = sum(glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, ord(c)) for c in game_over_text)
-        restart_text_width = sum(glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, ord(c)) for c in restart_text)
+        game_over_width = len(game_over_text) * 10
+        restart_text_width = len(restart_text) * 10
         
-        # Center game over text horizontally and vertically
-        draw_text(WINDOW_W/2 - (game_over_width/2), WINDOW_H/2, 
+        draw_text(WINDOW_W/2 - game_over_width/2, WINDOW_H/2, 
                   game_over_text, font=GLUT_BITMAP_HELVETICA_18)
-        # Center restart text horizontally and offset vertically below game over text
-        draw_text(WINDOW_W/2 - (restart_text_width/2), WINDOW_H/2 - 30, 
-                  restart_text)
+        draw_text(WINDOW_W/2 - restart_text_width/2, WINDOW_H/2 - 30, 
+                  restart_text, font=GLUT_BITMAP_HELVETICA_18)
+
     glPopMatrix()
     glMatrixMode(GL_PROJECTION)
     glPopMatrix()
@@ -2376,14 +1665,15 @@ def showScreen(): ### CRITICAL FIX: Obstacle Animation Drawing and Clean HUD ###
     glutSwapBuffers()
 
 # ---------- Helpers ----------
-def reset_ball(): ### MODIFIED: Reset Shield State ###
+def reset_ball():
     global ball_pos, is_falling, game_over, is_grounded, game_state
     global fall_velocity_x, fall_velocity_y, platform_segments, last_platform_tile_z_end
     global keys_pressed, segments_since_last_hole, segments_since_last_obstacle, segments_since_last_moving_obstacle
     global segments_until_hazards_start, breaking_particles, death_animation_timer, player_score
     global has_double_jump_charge, double_jump_timer, score_multiplier, multiplier_timer, is_boost_active, boost_timer
-    global has_shield_active, shield_charge_count, shield_timer, forward_speed # All power-up globals here
-    global is_obstacle_breaking_active # CRITICAL FIX: Reset obstacle breaking flag
+    global has_shield_active, shield_charge_count, shield_timer, forward_speed
+    global is_obstacle_breaking_active
+    global previous_ball_z # CRITICAL: Declare the global variable here
 
     ball_pos = [0.0, FLOOR_Y + ball_radius, -100.0]
     
@@ -2391,7 +1681,7 @@ def reset_ball(): ### MODIFIED: Reset Shield State ###
     game_over = False 
     is_grounded  = True 
     game_state = STATE_PLAYING 
-    is_obstacle_breaking_active = False # CRITICAL FIX: Initialize obstacle breaking flag
+    is_obstacle_breaking_active = False 
     
     fall_velocity_x, fall_velocity_y = 0.0, 0.0
 
@@ -2400,7 +1690,7 @@ def reset_ball(): ### MODIFIED: Reset Shield State ###
     death_animation_timer = 0.0 
     player_score = 0 
 
-    # --- Reset Power-up/Boost States (CRITICAL FIX) ---
+    # --- Reset Power-up/Boost States ---
     has_double_jump_charge = False
     double_jump_timer = 0.0
     score_multiplier = 1
@@ -2408,9 +1698,9 @@ def reset_ball(): ### MODIFIED: Reset Shield State ###
     is_boost_active = False
     boost_timer = 0.0
     forward_speed = -500.0 
-    has_shield_active = False ### NEW: Reset shield state ###
-    shield_charge_count = 0 ### NEW: Reset shield charges ###
-    shield_timer = 0.0 ### NEW: Reset shield timer ###
+    has_shield_active = False
+    shield_charge_count = 0
+    shield_timer = 0.0
 
     last_platform_tile_z_end = ball_pos[2] 
     
@@ -2424,11 +1714,13 @@ def reset_ball(): ### MODIFIED: Reset Shield State ###
         last_gen_segment = platform_segments[-1] if platform_segments else None
         generate_platform_tile(last_gen_segment)
     
+    # CRITICAL: Initialize the tracker *after* setting ball_pos
+    previous_ball_z = ball_pos[2] 
     generate_background_elements()
     keys_pressed = {}
 
 # ---------- Main ----------
-def main(): ### MODIFIED: Removed glShadeModel for compliance ###
+def main():
     global last_time_ms
     glutInit()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
@@ -2436,10 +1728,6 @@ def main(): ### MODIFIED: Removed glShadeModel for compliance ###
     glutInitWindowPosition(100, 50)
     glutCreateWindow(b"Slopey+ Platformer")
     glEnable(GL_DEPTH_TEST)
-    glDepthFunc(GL_LEQUAL)
-    glClearDepth(1.0)
-    glClearColor(0.05, 0.05, 0.08, 1.0)
-    # REMOVED: glShadeModel(GL_SMOOTH) # Not allowed by template rules
 
     # Hooks
     glutDisplayFunc(showScreen)

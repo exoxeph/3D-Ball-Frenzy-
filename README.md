@@ -29,7 +29,7 @@ This game boasts a wide array of dynamic features designed to provide a challeng
 
 ### Interactive Elements
 
-*   **Collectible Points:** Bright yellow, pulsating diamond-shaped icons that hover over safe tiles or static obstacles. Collecting them increases the player's score.
+*   **Collectible Points:** Bright red, pulsating diamond-shaped icons that hover over safe tiles or static obstacles. Collecting them increases the player's score.
 *   **Static Cube Obstacles:** Yellow 3D cubes placed on the platform lanes; collision triggers a destruction animation for the obstacle.
 *   **Moving Cylinder Obstacles:** Purple 3D cylinders that move continuously left-to-right across the entire platform width. Collision triggers a destruction animation for the obstacle.
 *   **Double Jump Power-up:** Collectible green double-chevron icon. Grants the ability to perform a second jump mid-air for a limited duration.
